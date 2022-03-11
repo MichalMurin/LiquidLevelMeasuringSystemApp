@@ -1,5 +1,4 @@
 ﻿using System;
-using LLMSapp.Models;
 using LLMSapp.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,17 +11,31 @@ namespace LLMSapp.ViewModels
     {
         private readonly IBluetoothService _blueToothService;
 
-        private string _inputText;
-        public string InputText
+        private string _waterLevel;
+        public string WaterLevel
         {
             get
             {
-                return _inputText;
+                return _waterLevel;
             }
             set
             {
-                _inputText = value;
-                OnPropertyChanged(nameof(InputText));
+                _waterLevel = value;
+                OnPropertyChanged(nameof(WaterLevel));
+            }
+        }
+
+        private string _connectionStatus;
+        public string ConnectionStatus
+        {
+            get
+            {
+                return _connectionStatus;
+            }
+            set
+            {
+                _connectionStatus = value;
+                OnPropertyChanged(nameof(ConnectionStatus));
             }
         }
 
@@ -42,19 +55,6 @@ namespace LLMSapp.ViewModels
             }
         }
 
-        private string _sendMessage;
-        public string SendMessage
-        {
-            get
-            {
-                return _sendMessage;
-            }
-            set
-            {
-                _sendMessage = value;
-            }
-        }
-
         private string _selectedDevice;
         public string SelectedDevice
         {
@@ -68,41 +68,12 @@ namespace LLMSapp.ViewModels
             }
         }
 
-        public ICommand ReadCommand => new Command(async () =>
-        {
-            InputText = await _blueToothService.Read(SelectedDevice);
-        });
-
-        public ICommand SendCommand => new Command(async () =>
-        {
-            await _blueToothService.Send(SelectedDevice, SendMessage);
-        });
-
-        public ICommand RedCommand => new Command(async () =>
-        {
-            await _blueToothService.Send(SelectedDevice, "r");
-        });
-
-        public ICommand GreenCommand => new Command(async () =>
-        {
-            await _blueToothService.Send(SelectedDevice, "g");
-        });
-
-        public ICommand BlueCommand => new Command(async () =>
-        {
-            await _blueToothService.Send(SelectedDevice, "b");
-        });
-
-        public ICommand BuzzCommand => new Command(async () =>
-        {
-            await _blueToothService.Send(SelectedDevice, "1");
-        });
-
         public AboutViewModel()
         {
-            Title = "TestPage";
+            ConnectionStatus = "Pripojiť";
+            WaterLevel = "-- cm";
+            Title = "Domov";
             _blueToothService = DependencyService.Get<IBluetoothService>();
-            InputText = "Start of program";
             var list = _blueToothService.GetDeviceList();
             DeviceList.Clear();
             foreach (var item in list)
@@ -110,6 +81,24 @@ namespace LLMSapp.ViewModels
                 DeviceList.Add(item);
             }
         }
+        public ICommand ConnectCommand => new Command(async () =>
+        {
+            if (_blueToothService.IsConnected())
+            {
+                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie je uz pripojene", "Ok");
+            }
+            else
+            {
+                if (await _blueToothService.Connect(SelectedDevice))
+                {
+                    ConnectionStatus = "Pripojené";
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie sa nepodarilo pripojit, uistite sa ze je zariadenie zapnute", "Ok");
+                }
+            }            
+        });  
     }
 
 }

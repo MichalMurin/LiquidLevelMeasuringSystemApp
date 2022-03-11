@@ -16,36 +16,44 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <StackLayout>
-            <Picker ItemsSource="{Binding DeviceList}"
-                    Title="Select Device"
-                    ItemDisplayBinding="{Binding .}"
-                    SelectedItem="{Binding SelectedDevice}"/>
-            <Entry Text="{Binding SendMessage}"
-                   Placeholder="Message" />
-            <Button Text="Send"
-                    Command="{Binding SendCommand}" />
-            <Button Text="Red color"
-                    Command="{Binding RedCommand}"
-                    BackgroundColor="Red"
-                    TextColor="Black"/>
-            <Button Text="Green color"
-                    Command="{Binding GreenCommand}"
-                    BackgroundColor="Green"
-                    TextColor="Black" />
-            <Button Text="Blue color"
-                    Command="{Binding BlueCommand}"
-                    BackgroundColor="Blue"
-                    TextColor="White" />
-            <Button Text="Buzzer"
-                    Command="{Binding BuzzCommand}"
-                    BackgroundColor="White"
-                    TextColor="Black" />
-            <Entry Text="{Binding InputText}"/>
-            <Button Text="Get Input text"
-                    Command="{Binding ReadCommand}"
-                    BackgroundColor="White"
-                    TextColor="Black" />
+        <StackLayout Spacing="3" Padding="15">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="ZARIADENIE:"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Center"
+                       FontSize="Medium"
+                       HorizontalOptions="FillAndExpand"
+                       TextColor="Black"/>
+                <Picker ItemsSource="{Binding DeviceList}"
+                        Title="Vyber zariadenie"
+                        TextColor="Black"
+                        HorizontalOptions="FillAndExpand" 
+                        FontSize="Small"
+                        ItemDisplayBinding="{Binding .}"
+                        SelectedItem="{Binding SelectedDevice}"/>
+            </StackLayout>
+            
+            <Button VerticalOptions="Center"
+                    HorizontalOptions="Start"
+                    Padding="20,20,20,20"
+                    Text="{Binding ConnectionStatus}"
+                    Command="{Binding ConnectCommand}"/>
+
+            <Label Text="Vzdialenosť hladiny od senzora"
+                   TextColor="Black"
+                   FontSize="40"
+                   HorizontalTextAlignment="Center"
+                   Padding="20,100,20,10"/>
+            <Label Text="{Binding WaterLevel}"
+                   TextColor="Black"
+                   FontSize="50"
+                   HorizontalTextAlignment="Center"
+                   Padding="20,10,20,100"/>
+
+            <Button Text="Načítaj výšku hladiny"
+                    Padding="10,20,10,20"/>
+
+
 
         </StackLayout>
     </ContentPage.Content>

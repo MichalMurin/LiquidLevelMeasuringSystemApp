@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using LLMSapp.Models;
+using LLMSapp.ViewModels;
 
 namespace LLMSapp.Views
 {
@@ -11,7 +11,7 @@ namespace LLMSapp.Views
         public AboutPage()
         {
             InitializeComponent();
-           // BindingContext = new AboutViewModel();
+            BindingContext = new AboutViewModel();
         }
     }
 }

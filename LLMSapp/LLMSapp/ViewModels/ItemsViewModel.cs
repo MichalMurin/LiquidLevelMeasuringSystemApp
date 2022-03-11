@@ -10,75 +10,53 @@ namespace LLMSapp.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
+        public Command SaveCommand { get; }
+        public Command SavePhoneNumberCommand { get; }
 
-        public ObservableCollection<Item> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
-
-        public ItemsViewModel()
+        private bool _isCallEnabled;
+        public bool IsCallEnabled
         {
-            Title = "Browse";
-            Items = new ObservableCollection<Item>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            ItemTapped = new Command<Item>(OnItemSelected);
-
-            AddItemCommand = new Command(OnAddItem);
-        }
-
-        async Task ExecuteLoadItemsCommand()
-        {
-            IsBusy = true;
-
-            try
+            get
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                }
+                return _isCallEnabled;
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        public void OnAppearing()
-        {
-            IsBusy = true;
-            SelectedItem = null;
-        }
-
-        public Item SelectedItem
-        {
-            get => _selectedItem;
             set
             {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
+                _isCallEnabled = value;
+                OnPropertyChanged(nameof(IsCallEnabled));
             }
         }
 
-        private async void OnAddItem(object obj)
+        private string _phoneNumber;
+        public string PhoneNumber
         {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
+            get
+            {
+                return _phoneNumber;
+            }
+            set
+            {
+                _phoneNumber = value;
+                OnPropertyChanged(nameof(PhoneNumber));
+            }
+        }
+        public ItemsViewModel()
+        {
+            Title = "Nastavenia";
+            IsCallEnabled = false;
+            SaveCommand = new Command(OnSave);
+            SavePhoneNumberCommand = new Command(OnSaveNumber);
+        }
+        
+        private async void OnSave()
+        {
+            
         }
 
-        async void OnItemSelected(Item item)
+        private async void OnSaveNumber()
         {
-            if (item == null)
-                return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
         }
+
     }
 }
