@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
-
+using System.Threading.Tasks;
 namespace LLMSapp.ViewModels
 {
     public class AboutViewModel : BaseViewModel
@@ -80,12 +80,13 @@ namespace LLMSapp.ViewModels
             {
                 DeviceList.Add(item);
             }
+
         }
         public ICommand ConnectCommand => new Command(async () =>
         {
             if (_blueToothService.IsConnected())
             {
-                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie je uz pripojene", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie je uz pripojene", "OK");
             }
             else
             {
@@ -95,10 +96,30 @@ namespace LLMSapp.ViewModels
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie sa nepodarilo pripojit, uistite sa ze je zariadenie zapnute", "Ok");
+                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie sa nepodarilo pripojit, uistite sa ze je zariadenie zapnute", "OK");
                 }
             }            
-        });  
+        });        
+
+        public ICommand RefreshDeviceListCommand => new Command(async () =>
+        {
+            GetBtDevices();
+        });
+
+        private async Task GetBtDevices()
+        {
+            var list = _blueToothService.GetDeviceList();
+            DeviceList.Clear();
+            foreach (var item in list)
+            {
+                DeviceList.Add(item);
+            }
+            if (DeviceList.Count == 0)
+            {
+                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Nepodarilo sa nájsť žiadne bluetooth zariadenia, uistite sa," +
+                    " že máte zapnutý bluetooth a zariadenie je správne zapnuté a spárované", "OK");
+            }
+        }
     }
 
 }

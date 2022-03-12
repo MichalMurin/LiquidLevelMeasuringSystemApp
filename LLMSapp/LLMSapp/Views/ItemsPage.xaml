@@ -7,28 +7,85 @@
              xmlns:model="clr-namespace:LLMSapp.Models"  
              x:Name="BrowseItemsPage">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ulozit" Command="{Binding AddItemCommand}" />
-    </ContentPage.ToolbarItems>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
-    <StackLayout>
-        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0">
-            <Label Text="Povolit zasielanie SMS"
+    <StackLayout Padding="20">
+        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20, 20, 0">
+            <CheckBox IsChecked="{Binding IsCallEnabled}"/>
+            <Label Text="Povoliť zasielanie SMS"
                TextColor="Black"
                FontSize="20"/>
-            <CheckBox IsChecked="{Binding IsCallEnabled}"/>
+            <ImageButton
+                Source="info_icon.png"
+                BackgroundColor="White"
+                Command="{Binding ShowSMSInfoCommand}"/>
         </FlexLayout>
-        <Entry Placeholder="Zadajte telefonne cislo"
+        <Entry
+           Placeholder="Zadajte telefónne číslo"
            TextColor="Black"
            ReturnCommand="{Binding SavePhoneNumberCommand}"
            FontSize="20"
            Text="{Binding PhoneNumber}"
            PlaceholderColor="Gray"
            IsEnabled="{Binding IsCallEnabled}"
-               IsVisible="true"/>
+           Keyboard="Telephone"/>
+        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20">
+            <CheckBox IsChecked="{Binding IsBuzzerEnabled}"/>
+            <Label Text="Povoliť BUZZER"
+               TextColor="Black"
+               FontSize="20"/>
+            <ImageButton
+                Source="info_icon.png"
+                BackgroundColor="White"
+                Command="{Binding ShowBuzzerInfoCommand}"/>
+        </FlexLayout>
+        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20">
+            <CheckBox IsChecked="{Binding IsLedEnabled}"/>
+            <Label Text="Povoliť LED"
+               TextColor="Black"
+               FontSize="20"/>
+            <ImageButton
+                Source="info_icon.png"
+                BackgroundColor="White"
+                Command="{Binding ShowLedInfoCommand}"/>
+        </FlexLayout>
+
+        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20,40,20,0">
+            <Label
+            Text="Hraničná vzdialenosť:"
+            TextColor="Black"
+            FontSize="25"/>
+            <ImageButton
+                Source="info_icon.png"
+                BackgroundColor="White"
+                Command="{Binding ShowDistanceInfoCommand}"/>
+        </FlexLayout>
+        
+        <FlexLayout JustifyContent="SpaceEvenly" AlignItems="Center" Padding="0,0,0,80">
+            <Entry
+                Placeholder="Zadajte hraničnú vzdialenosť"
+                PlaceholderColor="Gray"
+                Text="{Binding BorderDistance}"
+                FontSize="20"
+                TextColor="Black"                
+                Keyboard="Numeric"
+                ReturnCommand="{Binding SetDistanceCommand}"
+                HorizontalTextAlignment="Center"/>
+            <Label 
+                Text="cm"
+                TextColor="Black"
+                FontSize="20"
+                />
+        </FlexLayout>
+
+        <Button
+            Padding="30"
+            Text="ULOŽIŤ"
+            Command="{Binding SaveCommand}"/>
+
+
     </StackLayout>
     
 

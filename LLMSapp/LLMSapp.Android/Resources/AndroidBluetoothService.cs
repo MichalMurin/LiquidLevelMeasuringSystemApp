@@ -48,10 +48,13 @@ namespace LLMSapp.Droid
                 {
                     return false;
                 }
-
-                if (bluetoothSocket.IsConnected)
+                if (bluetoothSocket != null)
                 {
-                    return true;
+                    if (bluetoothSocket.IsConnected)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 return false;
             }
@@ -66,7 +69,7 @@ namespace LLMSapp.Droid
             return btdevice;
         }
 
-        public async Task Send(string deviceName, string text)
+        public async Task Send(string text)
         {
             //BluetoothDevice device = (from bd in bluetoothAdapter?.BondedDevices
             //                          where bd?.Name == deviceName
@@ -90,7 +93,7 @@ namespace LLMSapp.Droid
             }
         }
 
-        public async Task<string> Read(string deviceName)
+        public async Task<string> Read()
         {
             //BluetoothDevice device = (from bd in bluetoothAdapter?.BondedDevices
             //                          where bd?.Name == deviceName
