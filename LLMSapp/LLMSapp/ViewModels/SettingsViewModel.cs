@@ -110,7 +110,14 @@ namespace LLMSapp.ViewModels
         {
             ///TODO
             /// skontrolovat vstup a poslat do zariadenia
-            await _blueToothService.Send("1");
+            if (_blueToothService.IsConnected())
+            {
+                _blueToothService.Send("1");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie nie je pripojené", "OK");
+            }
         }
 
         private async void OnSaveNumber()

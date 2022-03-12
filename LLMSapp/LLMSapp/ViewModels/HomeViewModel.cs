@@ -108,9 +108,15 @@ namespace LLMSapp.ViewModels
 
         public ICommand GetDistanceCommad => new Command(async () =>
         {
+            ///TODO
+            /// prijat informacie zo zariadenia
             if (_blueToothService.IsConnected())
             {
                 _blueToothService.Send("g");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie nie je pripojené", "OK");
             }
         });
         
