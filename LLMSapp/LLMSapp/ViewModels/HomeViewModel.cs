@@ -86,7 +86,7 @@ namespace LLMSapp.ViewModels
         {
             if (_blueToothService.IsConnected())
             {
-                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie je uz pripojene", "OK");
+                await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie je už pripojené", "OK");
             }
             else
             {
@@ -96,7 +96,7 @@ namespace LLMSapp.ViewModels
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie sa nepodarilo pripojit, uistite sa ze je zariadenie zapnute", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie sa nepodarilo pripojiť, uistite sa, že je zariadenie zapnuté", "OK");
                 }
             }            
         });        
@@ -106,6 +106,14 @@ namespace LLMSapp.ViewModels
             GetBtDevices();
         });
 
+        public ICommand GetDistanceCommad => new Command(async () =>
+        {
+            if (_blueToothService.IsConnected())
+            {
+                _blueToothService.Send("g");
+            }
+        });
+        
         private async Task GetBtDevices()
         {
             var list = _blueToothService.GetDeviceList();

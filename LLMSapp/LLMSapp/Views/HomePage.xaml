@@ -60,7 +60,8 @@
                    Padding="20,10,20,100"/>
 
             <Button Text="Načítaj výšku hladiny"
-                    Padding="10,20,10,20"/>
+                    Padding="10,20,10,20"
+                    Command="{Binding GetDistanceCommad}"/>
 
 
 
