@@ -1,6 +1,8 @@
 ﻿using LLMSapp.ViewModels;
+using LLMSapp.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +11,18 @@ using Xamarin.Forms.Xaml;
 
 namespace LLMSapp.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class SettingsPage : ContentPage
     {
-        public LoginPage()
+
+        public SettingsPage()
         {
             InitializeComponent();
-            this.BindingContext = new LoginViewModel();
+            BindingContext =  new SettingsViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
         }
     }
 }

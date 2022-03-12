@@ -6,12 +6,12 @@ using LLMSapp.ViewModels;
 
 namespace LLMSapp.Views
 {
-    public partial class AboutPage : ContentPage
+    public partial class HomePage : ContentPage
     {
-        public AboutPage()
+        public HomePage()
         {
             InitializeComponent();
-            BindingContext = new AboutViewModel();
+            BindingContext = new HomeViewModel();
         }
     }
 }

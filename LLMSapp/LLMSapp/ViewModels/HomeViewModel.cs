@@ -7,7 +7,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 namespace LLMSapp.ViewModels
 {
-    public class AboutViewModel : BaseViewModel
+    public class HomeViewModel : BaseViewModel
     {
         private readonly IBluetoothService _blueToothService;
 
@@ -68,7 +68,7 @@ namespace LLMSapp.ViewModels
             }
         }
 
-        public AboutViewModel()
+        public HomeViewModel()
         {
             ConnectionStatus = "Pripojiť";
             WaterLevel = "-- cm";

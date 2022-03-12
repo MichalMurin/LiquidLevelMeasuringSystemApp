@@ -1,5 +1,4 @@
-﻿using LLMSapp.Models;
-using LLMSapp.Views;
+﻿using LLMSapp.Views;
 using LLMSapp.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -9,7 +8,7 @@ using Xamarin.Forms;
 
 namespace LLMSapp.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class SettingsViewModel : BaseViewModel
     {
         private readonly IBluetoothService _blueToothService;
         public Command SaveCommand { get; }
@@ -90,7 +89,7 @@ namespace LLMSapp.ViewModels
             }
         }
 
-        public ItemsViewModel()
+        public SettingsViewModel()
         {
             _blueToothService = DependencyService.Get<IBluetoothService>();
             Title = "Nastavenia";

@@ -1,5 +1,4 @@
-﻿using LLMSapp.Models;
-using LLMSapp.Services;
+﻿using LLMSapp.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,15 +9,6 @@ namespace LLMSapp.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
-        bool isBusy = false;
-        public bool IsBusy
-        {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
-
         string title = string.Empty;
         public string Title
         {

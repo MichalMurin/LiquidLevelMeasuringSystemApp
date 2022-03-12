@@ -10,8 +10,8 @@ namespace LLMSapp.Services
 
         bool IsConnected();
         IList<string> GetDeviceList();
-        Task Send(string deviceName, string text);
-        Task<string> Read(string deviceName);
+        Task Send(string text);
+        Task<string> Read();
     }
 
 }

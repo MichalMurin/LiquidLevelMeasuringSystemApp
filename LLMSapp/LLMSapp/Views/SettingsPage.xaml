@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LLMSapp.Views.ItemsPage"
+             x:Class="LLMSapp.Views.SettingsPage"
              Title="{Binding Title}"
              xmlns:local="clr-namespace:LLMSapp.ViewModels"  
              xmlns:model="clr-namespace:LLMSapp.Models"  
-             x:Name="BrowseItemsPage">
+             x:Name="BrowseSettingsPage">
 
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
