@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using System.Globalization;
 namespace LLMSapp.ViewModels
 {
     public class HomeViewModel : BaseViewModel
@@ -22,6 +23,20 @@ namespace LLMSapp.ViewModels
             {
                 _waterLevel = value;
                 OnPropertyChanged(nameof(WaterLevel));
+            }
+        }
+
+        private string _lastRefreshTime;
+        public string LastRefreshTime
+        {
+            get
+            {
+                return _lastRefreshTime;
+            }
+            set
+            {
+                _lastRefreshTime = value;
+                OnPropertyChanged(nameof(LastRefreshTime));
             }
         }
 
@@ -72,6 +87,7 @@ namespace LLMSapp.ViewModels
         {
             ConnectionStatus = "Pripojiť";
             WaterLevel = "-- cm";
+            LastRefreshTime = "";
             Title = "Domov";
             _blueToothService = DependencyService.Get<IBluetoothService>();
             var list = _blueToothService.GetDeviceList();
@@ -110,9 +126,13 @@ namespace LLMSapp.ViewModels
         {
             ///TODO
             /// prijat informacie zo zariadenia
+            /// 
             if (_blueToothService.IsConnected())
             {
                 _blueToothService.Send("g");
+                DateTime localDate = DateTime.Now;
+                var culture = new CultureInfo("sk-SK");
+                LastRefreshTime = localDate.ToString(culture);
             }
             else
             {
