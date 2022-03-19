@@ -93,7 +93,7 @@ namespace LLMSapp.Droid
             }
         }
 
-        public async Task<string> Read()
+        public async Task<string> Read(int count)
         {
             //BluetoothDevice device = (from bd in bluetoothAdapter?.BondedDevices
             //                          where bd?.Name == deviceName
@@ -106,10 +106,11 @@ namespace LLMSapp.Droid
                 //    UUID.FromString("00001101-0000-1000-8000-00805f9b34fb"));
 
                 //bluetoothSocket?.Connect();
-                byte[] buffer = new byte[100];
-                bluetoothSocket?.InputStream.Read(buffer, 0, 15);
+                byte[] buffer = new byte[count];
+                bluetoothSocket?.InputStream.Read(buffer, 0, count);
                 //bluetoothSocket.Close();
                 string ret = System.Text.Encoding.Default.GetString(buffer);
+
                 return ret;
             }
             catch (Exception exp)

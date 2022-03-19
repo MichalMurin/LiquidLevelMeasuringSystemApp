@@ -130,6 +130,8 @@ namespace LLMSapp.ViewModels
             if (_blueToothService.IsConnected())
             {
                 _blueToothService.Send("g");
+                WaterLevel = await _blueToothService.Read(3) + " cm";
+                WaterLevel = WaterLevel.TrimStart('0');
                 DateTime localDate = DateTime.Now;
                 var culture = new CultureInfo("sk-SK");
                 LastRefreshTime = localDate.ToString(culture);

@@ -19,17 +19,17 @@ namespace LLMSapp.ViewModels
         public Command ShowLedInfoCommand { get; }
         public Command ShowDistanceInfoCommand { get; }
 
-        private bool _isCallEnabled;
-        public bool IsCallEnabled
+        private bool _isSmsEnabled;
+        public bool isSMSEnabled
         {
             get
             {
-                return _isCallEnabled;
+                return _isSmsEnabled;
             }
             set
             {
-                _isCallEnabled = value;
-                OnPropertyChanged(nameof(IsCallEnabled));
+                _isSmsEnabled = value;
+                OnPropertyChanged(nameof(isSMSEnabled));
             }
         }
 
@@ -89,11 +89,13 @@ namespace LLMSapp.ViewModels
             }
         }
 
+
         public SettingsViewModel()
         {
             _blueToothService = DependencyService.Get<IBluetoothService>();
             Title = "Nastavenia";
-            IsCallEnabled = false;
+            PhoneNumber = "";
+            isSMSEnabled = false;
             IsBuzzerEnabled = false;
             IsLedEnabled = false;
             BorderDistance = "20";
@@ -104,15 +106,57 @@ namespace LLMSapp.ViewModels
             ShowBuzzerInfoCommand = new Command(OnShowBuzzerInfo);
             ShowLedInfoCommand = new Command(OnShowLedInfo);
             ShowDistanceInfoCommand = new Command(OnShowDistanceInfo);
-    }
-        
+        }
+
         private async void OnSave()
         {
             ///TODO
             /// skontrolovat vstup a poslat do zariadenia
             if (_blueToothService.IsConnected())
             {
-                _blueToothService.Send("1");
+                if (isSMSEnabled && PhoneNumber.Length == 0)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Chyba", "Telefónne číslo má zlý formát", "OK");
+                    return;
+                }
+                if (BorderDistance.Length == 0)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Vyplnte prosím všetky údaje", "OK");
+                    return;
+                }
+                _blueToothService.Send("s");
+                string response = "ok";//await _blueToothService.Read(2);
+                if (response == "ok")
+                {
+                    string settings = "";
+                    if (isSMSEnabled)
+                    {
+                        settings += "1";
+                        settings += PhoneNumber + "-";
+                    }
+                    else
+                    {
+                        settings += "0";
+                    }
+                    if (IsBuzzerEnabled)
+                    {
+                        settings += "1";
+                    }
+                    else
+                    {
+                        settings += "0";
+                    }
+                    if (IsLedEnabled)
+                    {
+                        settings += "1";
+                    }
+                    else
+                    {
+                        settings += "0";
+                    }
+                    settings += BorderDistance.PadLeft(3, '0') + "\r\n";
+                    _blueToothService.Send(settings);
+                }               
             }
             else
             {

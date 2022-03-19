@@ -13,7 +13,7 @@
     -->
     <StackLayout Padding="20">
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20, 20, 0">
-            <CheckBox IsChecked="{Binding IsCallEnabled}"/>
+            <CheckBox IsChecked="{Binding isSMSEnabled}"/>
             <Label Text="Povoliť zasielanie SMS"
                TextColor="Black"
                FontSize="20"/>
@@ -29,7 +29,7 @@
            FontSize="20"
            Text="{Binding PhoneNumber}"
            PlaceholderColor="Gray"
-           IsEnabled="{Binding IsCallEnabled}"
+           IsEnabled="{Binding isSMSEnabled}"
            Keyboard="Telephone"/>
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20">
             <CheckBox IsChecked="{Binding IsBuzzerEnabled}"/>
