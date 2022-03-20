@@ -19,6 +19,8 @@ namespace LLMSapp.Droid
 
         BluetoothSocket bluetoothSocket = null;
 
+        private BluetoothManager _manager = (BluetoothManager)Android.App.Application.Context.GetSystemService(Android.Content.Context.BluetoothService);
+
         public bool IsConnected()
         {
             if (bluetoothSocket != null)
@@ -69,22 +71,27 @@ namespace LLMSapp.Droid
             return btdevice;
         }
 
-        public async Task Send(string text)
+        //public async Task Send(string text)
+        //{
+        //    try
+        //    {
+        //        byte[] buffer = Encoding.UTF8.GetBytes(text);
+        //        bluetoothSocket?.OutputStream.Write(buffer, 0, buffer.Length);
+        //    }
+        //    catch (Exception exp)
+        //    {
+        //        Debug.WriteLine(exp.Message);
+        //        throw exp;
+        //    }
+        //}
+
+        public async Task Send(char text)
         {
-            //BluetoothDevice device = (from bd in bluetoothAdapter?.BondedDevices
-            //                          where bd?.Name == deviceName
-            //                          select bd).FirstOrDefault();
             try
             {
-                //await Task.Delay(1000);
-                //BluetoothSocket bluetoothSocket = device?.
-                //    CreateRfcommSocketToServiceRecord(
-                //    UUID.FromString("00001101-0000-1000-8000-00805f9b34fb"));
-
-                //bluetoothSocket?.Connect();
-                byte[] buffer = Encoding.UTF8.GetBytes(text);
+                char[] str = { text };
+                byte[] buffer = Encoding.UTF8.GetBytes(str);
                 bluetoothSocket?.OutputStream.Write(buffer, 0, buffer.Length);
-                //bluetoothSocket.Close();
             }
             catch (Exception exp)
             {
@@ -120,8 +127,20 @@ namespace LLMSapp.Droid
             }
         }
 
+        public bool IsBluetoothOn()
+        {
+            return _manager.Adapter.IsEnabled;
+        }
 
+        public bool TurnOnBluetooth()
+        {
+           return _manager.Adapter.Enable();
+        }
 
+        public bool TurnOfBluetooth()
+        {
+            return _manager.Adapter.Disable();
+        }
     }
 
 }

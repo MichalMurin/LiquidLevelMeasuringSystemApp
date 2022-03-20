@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace LLMSapp.ViewModels
 {
@@ -94,11 +95,11 @@ namespace LLMSapp.ViewModels
         {
             _blueToothService = DependencyService.Get<IBluetoothService>();
             Title = "Nastavenia";
-            PhoneNumber = "";
-            isSMSEnabled = false;
-            IsBuzzerEnabled = false;
-            IsLedEnabled = false;
-            BorderDistance = "20";
+            PhoneNumber = Preferences.Get("phoneNuberKey",string.Empty);
+            isSMSEnabled = Preferences.Get("isSmsEnabledKey", false);
+            IsBuzzerEnabled = Preferences.Get("isBuzzEnabledKey", false);
+            IsLedEnabled = Preferences.Get("isLedEnabledKey", false);
+            BorderDistance = Preferences.Get("borderDstKey", "30");
             SaveCommand = new Command(OnSave);
             SavePhoneNumberCommand = new Command(OnSaveNumber);
             SetDistanceCommand = new Command(OnSetDistance);
@@ -124,39 +125,40 @@ namespace LLMSapp.ViewModels
                     await Application.Current.MainPage.DisplayAlert("Upozornenie", "Vyplnte prosím všetky údaje", "OK");
                     return;
                 }
-                _blueToothService.Send("s");
-                string response = "ok";//await _blueToothService.Read(2);
-                if (response == "ok")
+                await _blueToothService.Send('s');
+                string settings = "";
+                if (isSMSEnabled)
                 {
-                    string settings = "";
-                    if (isSMSEnabled)
-                    {
-                        settings += "1";
-                        settings += PhoneNumber + "-";
-                    }
-                    else
-                    {
-                        settings += "0";
-                    }
-                    if (IsBuzzerEnabled)
-                    {
-                        settings += "1";
-                    }
-                    else
-                    {
-                        settings += "0";
-                    }
-                    if (IsLedEnabled)
-                    {
-                        settings += "1";
-                    }
-                    else
-                    {
-                        settings += "0";
-                    }
-                    settings += BorderDistance.PadLeft(3, '0') + "\r\n";
-                    _blueToothService.Send(settings);
-                }               
+                    settings += '1';
+                    settings += PhoneNumber + "-";
+                }
+                else
+                {
+                    settings += '0';
+                }
+                if (IsBuzzerEnabled)
+                {
+                    settings += '1';
+                }
+                else
+                {
+                    settings += '0';
+                }
+                if (IsLedEnabled)
+                {
+                    settings += '1';
+                }
+                else
+                {
+                    settings += '0';
+                }
+                settings += BorderDistance.PadLeft(3, '0') + '\n';
+                //await _blueToothService.Send(settings);
+                foreach (var c in settings)
+                {
+                    await _blueToothService.Send(c);
+                }
+                savePreferences();
             }
             else
             {
@@ -166,9 +168,9 @@ namespace LLMSapp.ViewModels
 
         private async void OnSaveNumber()
         {
-            if (PhoneNumber.Length > 13 || PhoneNumber.Length < 10)
-            {
-                await Application.Current.MainPage.DisplayAlert("Chyba", "Telefónne číslo má zlý formát", "OK");
+            if (PhoneNumber.Length != 10 || PhoneNumber[0] != '0')
+            { 
+                await Application.Current.MainPage.DisplayAlert("Chyba", "Telefónne číslo má zlý formát, zadajte číslo vo formáte 09........", "OK");
                 PhoneNumber = string.Empty;
             }
         }
@@ -208,6 +210,15 @@ namespace LLMSapp.ViewModels
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení definovanej vzdialenosti sa v zariadení spustí alarmový stav" +
                 " - zariadenie spustí vodné čerpadlo a pokúsi sa hladinu znížiť" +
                 " [ Hraničná vzdialenosť musí byť v intervale <10, 400> ] ", "OK");
+        }
+
+        private void savePreferences()
+        {
+            Preferences.Set("phoneNuberKey", PhoneNumber);
+            Preferences.Set("isSmsEnabledKey", isSMSEnabled);
+            Preferences.Set("isBuzzEnabledKey", IsBuzzerEnabled);
+            Preferences.Set("isLedEnabledKey", IsLedEnabled);
+            Preferences.Set("borderDstKey", BorderDistance);
         }
     }
 }

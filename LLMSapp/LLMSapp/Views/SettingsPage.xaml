@@ -13,7 +13,10 @@
     -->
     <StackLayout Padding="20">
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20, 20, 0">
-            <CheckBox IsChecked="{Binding isSMSEnabled}"/>
+            <Switch IsToggled="{Binding isSMSEnabled}"
+                    ThumbColor="Black"
+                    OnColor="DarkGray"
+                    Scale="1.2"/>
             <Label Text="Povoliť zasielanie SMS"
                TextColor="Black"
                FontSize="20"/>
@@ -32,7 +35,10 @@
            IsEnabled="{Binding isSMSEnabled}"
            Keyboard="Telephone"/>
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20">
-            <CheckBox IsChecked="{Binding IsBuzzerEnabled}"/>
+            <Switch IsToggled="{Binding IsBuzzerEnabled}"
+                    ThumbColor="Black"
+                    OnColor="DarkGray"
+                    Scale="1.2"/>
             <Label Text="Povoliť BUZZER"
                TextColor="Black"
                FontSize="20"/>
@@ -42,7 +48,10 @@
                 Command="{Binding ShowBuzzerInfoCommand}"/>
         </FlexLayout>
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20">
-            <CheckBox IsChecked="{Binding IsLedEnabled}"/>
+            <Switch IsToggled="{Binding IsLedEnabled}"
+                    ThumbColor="Black"
+                    OnColor="DarkGray"
+                    Scale="1.2"/>
             <Label Text="Povoliť LED"
                TextColor="Black"
                FontSize="20"/>
