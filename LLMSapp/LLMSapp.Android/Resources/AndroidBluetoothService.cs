@@ -21,6 +21,8 @@ namespace LLMSapp.Droid
 
         private BluetoothManager _manager = (BluetoothManager)Android.App.Application.Context.GetSystemService(Android.Content.Context.BluetoothService);
 
+        private BluetoothDevice device = null;
+
         public bool IsConnected()
         {
             if (bluetoothSocket != null)
@@ -34,9 +36,9 @@ namespace LLMSapp.Droid
         {
             if (deviceName != null)
             {
-                BluetoothDevice device = (from bd in bluetoothAdapter?.BondedDevices
-                                          where bd?.Name == deviceName
-                                          select bd).FirstOrDefault();
+                device = (from bd in bluetoothAdapter?.BondedDevices
+                                 where bd?.Name == deviceName
+                                 select bd).FirstOrDefault();
                 try
                 {
                     await Task.Delay(1000);
@@ -46,19 +48,19 @@ namespace LLMSapp.Droid
 
                     bluetoothSocket?.Connect();
                 }
-                catch (Exception ex)
+                catch (Exception exp)
                 {
+                    Debug.WriteLine(exp.Message);
                     return false;
                 }
+
                 if (bluetoothSocket != null)
                 {
                     if (bluetoothSocket.IsConnected)
                     {
                         return true;
                     }
-                    return false;
                 }
-                return false;
             }
             return false;
             
@@ -85,18 +87,20 @@ namespace LLMSapp.Droid
         //    }
         //}
 
-        public async Task Send(char text)
+        public async Task<bool> Send(char text)
         {
             try
             {
                 char[] str = { text };
                 byte[] buffer = Encoding.UTF8.GetBytes(str);
                 bluetoothSocket?.OutputStream.Write(buffer, 0, buffer.Length);
+                return true;
             }
             catch (Exception exp)
             {
                 Debug.WriteLine(exp.Message);
-                throw exp;
+                bluetoothSocket.Close();
+                return false;
             }
         }
 
@@ -123,7 +127,8 @@ namespace LLMSapp.Droid
             catch (Exception exp)
             {
                 Debug.WriteLine(exp.Message);
-                throw exp;
+                bluetoothSocket.Close();
+                return null;
             }
         }
 

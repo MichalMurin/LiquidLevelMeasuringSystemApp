@@ -8,10 +8,14 @@ namespace LLMSapp.Views
 {
     public partial class HomePage : ContentPage
     {
+        private static HomeViewModel _instance;
+        public static HomeViewModel Instance { get { return _instance; } }
         public HomePage()
         {
             InitializeComponent();
-            BindingContext = new HomeViewModel();
-        }
+            _instance = new HomeViewModel();
+            BindingContext = _instance;
+            
+    }
     }
 }

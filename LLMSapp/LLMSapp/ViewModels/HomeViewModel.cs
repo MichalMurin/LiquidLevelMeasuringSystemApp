@@ -116,6 +116,7 @@ namespace LLMSapp.ViewModels
             }
             else
             {
+                ConnectionStatus = "Pripojiť";
                 if (_blueToothService.IsBluetoothOn())
                 {
                     if (SelectedDevice != null)
@@ -154,17 +155,27 @@ namespace LLMSapp.ViewModels
             /// 
             if (_blueToothService.IsConnected())
             {
-                await _blueToothService.Send('g');
-                WaterLevel = await _blueToothService.Read(3) + " cm";
-                WaterLevel = WaterLevel.TrimStart('0');
-                DateTime localDate = DateTime.Now;
-                var culture = new CultureInfo("sk-SK");
-                LastRefreshTime = localDate.ToString(culture);
-                setPreferences();
+                bool control = false;
+                control = await _blueToothService.Send('g');
+                if (control)
+                {
+                    WaterLevel = await _blueToothService.Read(3) + " cm";
+                    WaterLevel = WaterLevel.TrimStart('0');
+                    DateTime localDate = DateTime.Now;
+                    var culture = new CultureInfo("sk-SK");
+                    LastRefreshTime = localDate.ToString(culture);
+                    setPreferences();
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie nie je pripojené", "OK");
+                    ConnectionStatus = "Pripojiť";
+                }
             }
             else
             {
                 await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie nie je pripojené", "OK");
+                ConnectionStatus = "Pripojiť";
             }
         });
         

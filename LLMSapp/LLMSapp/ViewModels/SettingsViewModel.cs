@@ -12,6 +12,7 @@ namespace LLMSapp.ViewModels
     public class SettingsViewModel : BaseViewModel
     {
         private readonly IBluetoothService _blueToothService;
+
         public Command SaveCommand { get; }
         public Command SavePhoneNumberCommand { get; }
         public Command SetDistanceCommand { get; }
@@ -90,12 +91,11 @@ namespace LLMSapp.ViewModels
             }
         }
 
-
         public SettingsViewModel()
         {
             _blueToothService = DependencyService.Get<IBluetoothService>();
             Title = "Nastavenia";
-            PhoneNumber = Preferences.Get("phoneNuberKey",string.Empty);
+            PhoneNumber = Preferences.Get("phoneNuberKey", string.Empty);
             isSMSEnabled = Preferences.Get("isSmsEnabledKey", false);
             IsBuzzerEnabled = Preferences.Get("isBuzzEnabledKey", false);
             IsLedEnabled = Preferences.Get("isLedEnabledKey", false);
@@ -154,9 +154,16 @@ namespace LLMSapp.ViewModels
                 }
                 settings += BorderDistance.PadLeft(3, '0') + '\n';
                 //await _blueToothService.Send(settings);
+                bool control = false;
                 foreach (var c in settings)
                 {
-                    await _blueToothService.Send(c);
+                    control = await _blueToothService.Send(c);
+                    if (!control)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie nie je pripojené", "OK");
+                        HomePage.Instance.ConnectionStatus = "Pripojiť";
+                        return;
+                    }
                 }
                 savePreferences();
             }
@@ -169,7 +176,7 @@ namespace LLMSapp.ViewModels
         private async void OnSaveNumber()
         {
             if (PhoneNumber.Length != 10 || PhoneNumber[0] != '0')
-            { 
+            {
                 await Application.Current.MainPage.DisplayAlert("Chyba", "Telefónne číslo má zlý formát, zadajte číslo vo formáte 09........", "OK");
                 PhoneNumber = string.Empty;
             }

@@ -19,10 +19,5 @@ namespace LLMSapp.Views
             InitializeComponent();
             BindingContext =  new SettingsViewModel();
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-        }
     }
 }
