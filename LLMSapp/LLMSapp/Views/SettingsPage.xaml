@@ -61,6 +61,20 @@
                 Command="{Binding ShowLedInfoCommand}"/>
         </FlexLayout>
 
+        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20">
+            <Switch IsToggled="{Binding IsExternAlarmEnabled}"
+                    ThumbColor="Black"
+                    OnColor="DarkGray"
+                    Scale="1.2"/>
+            <Label Text="Povoliť Externý Alarm"
+               TextColor="Black"
+               FontSize="20"/>
+            <ImageButton
+                Source="info_icon.png"
+                BackgroundColor="White"
+                Command="{Binding ShowExternAlarmCommand}"/>
+        </FlexLayout>
+
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20,40,20,0">
             <Label
             Text="Hraničná vzdialenosť:"

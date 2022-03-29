@@ -20,6 +20,7 @@ namespace LLMSapp.ViewModels
         public Command ShowBuzzerInfoCommand { get; }
         public Command ShowLedInfoCommand { get; }
         public Command ShowDistanceInfoCommand { get; }
+        public Command ShowExternAlarmCommand { get; }
 
         private bool _isSmsEnabled;
         public bool isSMSEnabled
@@ -63,6 +64,20 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        private bool _isExternAlarmEnabled;
+        public bool IsExternAlarmEnabled
+        {
+            get
+            {
+                return _isExternAlarmEnabled;
+            }
+            set
+            {
+                _isExternAlarmEnabled = value;
+                OnPropertyChanged(nameof(IsExternAlarmEnabled));
+            }
+        }
+
         private string _phoneNumber;
         public string PhoneNumber
         {
@@ -99,6 +114,7 @@ namespace LLMSapp.ViewModels
             isSMSEnabled = Preferences.Get("isSmsEnabledKey", false);
             IsBuzzerEnabled = Preferences.Get("isBuzzEnabledKey", false);
             IsLedEnabled = Preferences.Get("isLedEnabledKey", false);
+            IsExternAlarmEnabled = Preferences.Get("isExternAlarmKey", false);
             BorderDistance = Preferences.Get("borderDstKey", "30");
             SaveCommand = new Command(OnSave);
             SavePhoneNumberCommand = new Command(OnSaveNumber);
@@ -107,6 +123,7 @@ namespace LLMSapp.ViewModels
             ShowBuzzerInfoCommand = new Command(OnShowBuzzerInfo);
             ShowLedInfoCommand = new Command(OnShowLedInfo);
             ShowDistanceInfoCommand = new Command(OnShowDistanceInfo);
+            ShowExternAlarmCommand = new Command(OnShowExternAlarmInfo);
         }
 
         private async void OnSave()
@@ -145,6 +162,14 @@ namespace LLMSapp.ViewModels
                     settings += '0';
                 }
                 if (IsLedEnabled)
+                {
+                    settings += '1';
+                }
+                else
+                {
+                    settings += '0';
+                }
+                if (IsExternAlarmEnabled)
                 {
                     settings += '1';
                 }
@@ -219,6 +244,11 @@ namespace LLMSapp.ViewModels
                 " [ Hraničná vzdialenosť musí byť v intervale <10, 400> ] ", "OK");
         }
 
+        private async void OnShowExternAlarmInfo()
+        {
+            await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení nastavenej hladiny v nádobe sa zopne externý alarm - zariadenie pripojené k relé 2", "OK");
+        }
+
         private void savePreferences()
         {
             Preferences.Set("phoneNuberKey", PhoneNumber);
@@ -226,6 +256,7 @@ namespace LLMSapp.ViewModels
             Preferences.Set("isBuzzEnabledKey", IsBuzzerEnabled);
             Preferences.Set("isLedEnabledKey", IsLedEnabled);
             Preferences.Set("borderDstKey", BorderDistance);
+            Preferences.Set("isExternAlarmKey", IsExternAlarmEnabled);
         }
     }
 }
