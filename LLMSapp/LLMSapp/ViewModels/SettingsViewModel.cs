@@ -128,8 +128,6 @@ namespace LLMSapp.ViewModels
 
         private async void OnSave()
         {
-            ///TODO
-            /// skontrolovat vstup a poslat do zariadenia
             if (_blueToothService.IsConnected())
             {
                 if (isSMSEnabled && PhoneNumber.Length == 0)
@@ -178,7 +176,6 @@ namespace LLMSapp.ViewModels
                     settings += '0';
                 }
                 settings += BorderDistance.PadLeft(3, '0') + '\n';
-                //await _blueToothService.Send(settings);
                 bool control = false;
                 foreach (var c in settings)
                 {

@@ -150,9 +150,6 @@ namespace LLMSapp.ViewModels
 
         public ICommand GetDistanceCommad => new Command(async () =>
         {
-            ///TODO
-            /// prijat informacie zo zariadenia
-            /// 
             if (_blueToothService.IsConnected())
             {
                 bool control = false;

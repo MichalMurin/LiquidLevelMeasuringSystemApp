@@ -78,10 +78,6 @@
                 </StackLayout>
                 
             </FlexLayout>
-
-
-
         </StackLayout>
     </ContentPage.Content>
-
 </ContentPage>

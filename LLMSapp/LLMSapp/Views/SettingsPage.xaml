@@ -7,10 +7,6 @@
              xmlns:model="clr-namespace:LLMSapp.Models"  
              x:Name="BrowseSettingsPage">
 
-    <!--
-      x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
-      https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
-    -->
     <StackLayout Padding="20">
         <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 20, 20, 0">
             <Switch IsToggled="{Binding isSMSEnabled}"
@@ -108,8 +104,5 @@
             Text="ULOŽIŤ"
             Command="{Binding SaveCommand}"/>
 
-
     </StackLayout>
-    
-
 </ContentPage>
