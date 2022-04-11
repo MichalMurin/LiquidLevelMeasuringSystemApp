@@ -10,9 +10,8 @@ namespace LLMSapp.Services
 
         bool IsConnected();
         IList<string> GetDeviceList();
-        Task<bool> Send(char text);
-        Task<string> Read(int count);
-
+        bool Send(char character);
+        string Read(int count);
         bool IsBluetoothOn();
         bool TurnOnBluetooth();
         bool TurnOfBluetooth();

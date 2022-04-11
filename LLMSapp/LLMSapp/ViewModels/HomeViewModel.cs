@@ -100,7 +100,7 @@ namespace LLMSapp.ViewModels
 
         }
 
-        public async void OfBtHandling()
+        private async void OfBtHandling()
         {
             bool answer = await Application.Current.MainPage.DisplayAlert("Nemáte zapnuté bluetooth!", "Chcete zapnúť bluetooth?", "ÁNO", "NIE");
             if (answer)
@@ -153,15 +153,15 @@ namespace LLMSapp.ViewModels
             if (_blueToothService.IsConnected())
             {
                 bool control = false;
-                control = await _blueToothService.Send('g');
+                control = _blueToothService.Send('g');
                 if (control)
                 {
-                    WaterLevel = await _blueToothService.Read(3) + " cm";
+                    WaterLevel = _blueToothService.Read(3) + " cm";
                     WaterLevel = WaterLevel.TrimStart('0');
                     DateTime localDate = DateTime.Now;
                     var culture = new CultureInfo("sk-SK");
                     LastRefreshTime = localDate.ToString(culture);
-                    setPreferences();
+                    SetPreferences();
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace LLMSapp.ViewModels
             
         }
 
-        private void setPreferences()
+        private void SetPreferences()
         {
             Preferences.Set("lastRefreshedTimeKey", LastRefreshTime);
             Preferences.Set("waterLevelKey", WaterLevel);

@@ -23,7 +23,7 @@ namespace LLMSapp.ViewModels
         public Command ShowExternAlarmCommand { get; }
 
         private bool _isSmsEnabled;
-        public bool isSMSEnabled
+        public bool IsSMSEnabled
         {
             get
             {
@@ -32,7 +32,7 @@ namespace LLMSapp.ViewModels
             set
             {
                 _isSmsEnabled = value;
-                OnPropertyChanged(nameof(isSMSEnabled));
+                OnPropertyChanged(nameof(IsSMSEnabled));
             }
         }
 
@@ -111,7 +111,7 @@ namespace LLMSapp.ViewModels
             _blueToothService = DependencyService.Get<IBluetoothService>();
             Title = "Nastavenia";
             PhoneNumber = Preferences.Get("phoneNuberKey", string.Empty);
-            isSMSEnabled = Preferences.Get("isSmsEnabledKey", false);
+            IsSMSEnabled = Preferences.Get("isSmsEnabledKey", false);
             IsBuzzerEnabled = Preferences.Get("isBuzzEnabledKey", false);
             IsLedEnabled = Preferences.Get("isLedEnabledKey", false);
             IsExternAlarmEnabled = Preferences.Get("isExternAlarmKey", false);
@@ -130,7 +130,7 @@ namespace LLMSapp.ViewModels
         {
             if (_blueToothService.IsConnected())
             {
-                if (isSMSEnabled && PhoneNumber.Length == 0)
+                if (IsSMSEnabled && PhoneNumber.Length == 0)
                 {
                     await Application.Current.MainPage.DisplayAlert("Chyba", "Telefónne číslo má zlý formát", "OK");
                     return;
@@ -140,9 +140,9 @@ namespace LLMSapp.ViewModels
                     await Application.Current.MainPage.DisplayAlert("Upozornenie", "Vyplnte prosím všetky údaje", "OK");
                     return;
                 }
-                await _blueToothService.Send('s');
+                _blueToothService.Send('s');
                 string settings = "";
-                if (isSMSEnabled)
+                if (IsSMSEnabled)
                 {
                     settings += '1';
                     settings += PhoneNumber + "-";
@@ -179,7 +179,7 @@ namespace LLMSapp.ViewModels
                 bool control = false;
                 foreach (var c in settings)
                 {
-                    control = await _blueToothService.Send(c);
+                    control = _blueToothService.Send(c);
                     if (!control)
                     {
                         await Application.Current.MainPage.DisplayAlert("Upozornenie", "Zariadenie nie je pripojené", "OK");
@@ -187,7 +187,7 @@ namespace LLMSapp.ViewModels
                         return;
                     }
                 }
-                savePreferences();
+                SavePreferences();
             }
             else
             {
@@ -246,10 +246,10 @@ namespace LLMSapp.ViewModels
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení nastavenej hladiny v nádobe sa zopne externý alarm - zariadenie pripojené k relé 2", "OK");
         }
 
-        private void savePreferences()
+        private void SavePreferences()
         {
             Preferences.Set("phoneNuberKey", PhoneNumber);
-            Preferences.Set("isSmsEnabledKey", isSMSEnabled);
+            Preferences.Set("isSmsEnabledKey", IsSMSEnabled);
             Preferences.Set("isBuzzEnabledKey", IsBuzzerEnabled);
             Preferences.Set("isLedEnabledKey", IsLedEnabled);
             Preferences.Set("borderDstKey", BorderDistance);

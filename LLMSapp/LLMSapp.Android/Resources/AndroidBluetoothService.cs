@@ -15,20 +15,20 @@ namespace LLMSapp.Droid
 {
     public class AndroidBlueToothService : IBluetoothService
     {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.DefaultAdapter;
+        BluetoothAdapter bluetoothAdapter_ = BluetoothAdapter.DefaultAdapter;
 
-        BluetoothSocket bluetoothSocket = null;
+        BluetoothSocket bluetoothSocket_ = null;
 
-        private BluetoothManager _manager = (BluetoothManager)Android.App.Application.Context.GetSystemService(Android.Content.Context.BluetoothService);
+        private BluetoothManager manager_ = (BluetoothManager)Android.App.Application.Context.GetSystemService(Android.Content.Context.BluetoothService);
 
-        private BluetoothDevice device = null;
+        private BluetoothDevice device_ = null;
 
 
         public bool IsConnected()
         {
-            if (bluetoothSocket != null)
+            if (bluetoothSocket_ != null)
             {
-                return bluetoothSocket.IsConnected;
+                return bluetoothSocket_.IsConnected;
             }
             return false;            
         }
@@ -37,17 +37,17 @@ namespace LLMSapp.Droid
         {
             if (deviceName != null)
             {
-                device = (from bd in bluetoothAdapter?.BondedDevices
+                device_ = (from bd in bluetoothAdapter_?.BondedDevices
                                  where bd?.Name == deviceName
                                  select bd).FirstOrDefault();
                 try
                 {
                     await Task.Delay(1000);
-                    bluetoothSocket = device?.
+                    bluetoothSocket_ = device_?.
                         CreateRfcommSocketToServiceRecord(
                         UUID.FromString("00001101-0000-1000-8000-00805f9b34fb"));
 
-                    bluetoothSocket?.Connect();
+                    bluetoothSocket_?.Connect();
                 }
                 catch (Exception exp)
                 {
@@ -55,9 +55,9 @@ namespace LLMSapp.Droid
                     return false;
                 }
 
-                if (bluetoothSocket != null)
+                if (bluetoothSocket_ != null)
                 {
-                    if (bluetoothSocket.IsConnected)
+                    if (bluetoothSocket_.IsConnected)
                     {
                         return true;
                     }
@@ -69,57 +69,57 @@ namespace LLMSapp.Droid
         
         public IList<string> GetDeviceList()
         {
-            var btdevice = bluetoothAdapter?.BondedDevices.Select(i => i.Name).ToList();
+            var btdevice = bluetoothAdapter_?.BondedDevices.Select(i => i.Name).ToList();
             return btdevice;
         }
 
-        public async Task<bool> Send(char text)
+        public bool Send(char character)
         {
             try
             {
-                char[] str = { text };
-                byte[] buffer = Encoding.UTF8.GetBytes(str);
-                bluetoothSocket?.OutputStream.Write(buffer, 0, buffer.Length);
+                char[] chars = { character };
+                byte[] buffer = Encoding.UTF8.GetBytes(chars);
+                bluetoothSocket_?.OutputStream.Write(buffer, 0, buffer.Length);
                 return true;
             }
             catch (Exception exp)
             {
                 Debug.WriteLine(exp.Message);
-                bluetoothSocket.Close();
+                bluetoothSocket_.Close();
                 return false;
             }
         }
 
-        public async Task<string> Read(int count)
+        public string Read(int count)
         {
             try
             {
                 byte[] buffer = new byte[count];
-                bluetoothSocket?.InputStream.Read(buffer, 0, count);
+                bluetoothSocket_?.InputStream.Read(buffer, 0, count);
                 string ret = System.Text.Encoding.Default.GetString(buffer);
                 return ret;
             }
             catch (Exception exp)
             {
                 Debug.WriteLine(exp.Message);
-                bluetoothSocket.Close();
+                bluetoothSocket_.Close();
                 return null;
             }
         }
 
         public bool IsBluetoothOn()
         {
-            return _manager.Adapter.IsEnabled;
+            return manager_.Adapter.IsEnabled;
         }
 
         public bool TurnOnBluetooth()
         {
-           return _manager.Adapter.Enable();
+           return manager_.Adapter.Enable();
         }
 
         public bool TurnOfBluetooth()
         {
-            return _manager.Adapter.Disable();
+            return manager_.Adapter.Disable();
         }
     }
 
