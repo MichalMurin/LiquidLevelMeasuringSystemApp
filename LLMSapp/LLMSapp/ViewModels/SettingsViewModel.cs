@@ -9,19 +9,59 @@ using Xamarin.Essentials;
 
 namespace LLMSapp.ViewModels
 {
+    /// <summary>
+    /// trieda pre spravu karty nastavenia
+    /// </summary>
     public class SettingsViewModel : BaseViewModel
     {
+        /// <summary>
+        /// instancia rozhrania IBluetoothService pre spravu bluetooth
+        /// </summary>
         private readonly IBluetoothService _blueToothService;
 
+        /// <summary>
+        /// prikaz na ulozenie nastaveni
+        /// </summary>
         public Command SaveCommand { get; }
+
+        /// <summary>
+        /// prikaz na ulozenie nastaveneho telefonneho cisla
+        /// </summary>
         public Command SavePhoneNumberCommand { get; }
+
+        /// <summary>
+        /// prikaz na ulozenie nastavenej vzdialenosti
+        /// </summary>
         public Command SetDistanceCommand { get; }
+
+        /// <summary>
+        /// prikaz na zobrazenie informacii o moznosti SMS
+        /// </summary>
         public Command ShowSMSInfoCommand { get; }
+
+        /// <summary>
+        /// prikaz na zobrazenie informacii o moznosti Buzzer
+        /// </summary>
         public Command ShowBuzzerInfoCommand { get; }
+
+        /// <summary>
+        /// prikaz na zobrazenie informacii o moznosti LED
+        /// </summary>
         public Command ShowLedInfoCommand { get; }
+
+        /// <summary>
+        /// prikaz na zobrazenie informacii o vzdialenosti
+        /// </summary>
         public Command ShowDistanceInfoCommand { get; }
+
+        /// <summary>
+        /// prikaz na zobrazenie informacii o moznosti Externeho alarmu
+        /// </summary>
         public Command ShowExternAlarmCommand { get; }
 
+        /// <summary>
+        /// premenna pre ukladanie informacie o povoleni SMS
+        /// </summary>
         private bool _isSmsEnabled;
         public bool IsSMSEnabled
         {
@@ -36,6 +76,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// premenna pre ukladanie informacie o povoleni Buzzera
+        /// </summary>
         private bool _isBuzzerEnabled;
         public bool IsBuzzerEnabled
         {
@@ -50,6 +93,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// premenna pre ukladanie informacie o povoleni LED
+        /// </summary>
         private bool _isLedEnabled;
         public bool IsLedEnabled
         {
@@ -64,6 +110,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// premenna pre ukladanie informacie o povoleni externeho alarmu
+        /// </summary>
         private bool _isExternAlarmEnabled;
         public bool IsExternAlarmEnabled
         {
@@ -78,6 +127,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// premenna pre ukladanie telefonneho cisla
+        /// </summary>
         private string _phoneNumber;
         public string PhoneNumber
         {
@@ -92,6 +144,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// premenna pre ukladanie nastavenej vzdialenosti
+        /// </summary>
         private string _borderDistance;
         public string BorderDistance
         {
@@ -106,6 +161,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Konstruktor triedy
+        /// </summary>
         public SettingsViewModel()
         {
             _blueToothService = DependencyService.Get<IBluetoothService>();
@@ -126,6 +184,9 @@ namespace LLMSapp.ViewModels
             ShowExternAlarmCommand = new Command(OnShowExternAlarmInfo);
         }
 
+        /// <summary>
+        /// metoda na ulozenie nastaveni
+        /// </summary>
         private async void OnSave()
         {
             if (_blueToothService.IsConnected())
@@ -195,6 +256,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// metoda na ulozenie telefonneho cisla
+        /// </summary>
         private async void OnSaveNumber()
         {
             if (PhoneNumber.Length != 10 || PhoneNumber[0] != '0')
@@ -204,6 +268,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// metoda na nastavenie vzdialenosti
+        /// </summary>
         private async void OnSetDistance()
         {
             int dst;
@@ -220,20 +287,33 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// metoda pre ukazanie informacii o SMS
+        /// </summary>
         private async void OnShowSMSInfo()
         {
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení nastavenej hladiny v nádobe sa odošle SMS správa na zadané telefónne číslo", "OK");
         }
+
+        /// <summary>
+        /// metoda pre ukazanie informacii o LED
+        /// </summary>
         private async void OnShowLedInfo()
         {
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení nastavenej hladiny v nádobe sa bude blikať signalizačná LED", "OK");
         }
 
+        /// <summary>
+        /// metoda pre ukazanie informacii o Buzzri
+        /// </summary>
         private async void OnShowBuzzerInfo()
         {
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení nastavenej hladiny v nádobe sa spustí varovný alarm", "OK");
         }
 
+        /// <summary>
+        /// metoda pre ukazanie informacii o vzdialenosti 
+        /// </summary>
         private async void OnShowDistanceInfo()
         {
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení definovanej vzdialenosti sa v zariadení spustí alarmový stav" +
@@ -241,11 +321,17 @@ namespace LLMSapp.ViewModels
                 " [ Hraničná vzdialenosť musí byť v intervale <10, 400> ] ", "OK");
         }
 
+        /// <summary>
+        /// metoda pre ukazanie informacii o externom alarme
+        /// </summary>
         private async void OnShowExternAlarmInfo()
         {
             await Application.Current.MainPage.DisplayAlert("Info", "Pri prekročení nastavenej hladiny v nádobe sa zopne externý alarm - zariadenie pripojené k relé 2", "OK");
         }
 
+        /// <summary>
+        /// metoda na nastavenie preferencii aplikacie
+        /// </summary>
         private void SavePreferences()
         {
             Preferences.Set("phoneNuberKey", PhoneNumber);

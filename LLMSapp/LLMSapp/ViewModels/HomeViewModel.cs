@@ -9,10 +9,19 @@ using System.Globalization;
 using Xamarin.Essentials;
 namespace LLMSapp.ViewModels
 {
+    /// <summary>
+    /// Trieda pre spravu domovskej obrazovky
+    /// </summary>
     public class HomeViewModel : BaseViewModel
     {
+        /// <summary>
+        /// instancia rozhrania IBluetoothService pre spravu bluetooth
+        /// </summary>
         private readonly IBluetoothService _blueToothService;
 
+        /// <summary>
+        /// Vzdialenost hladiny od senzora
+        /// </summary>
         private string _waterLevel;
         public string WaterLevel
         {
@@ -27,6 +36,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// casovy udaj o poslednom nacitavani hladiny
+        /// </summary>
         private string _lastRefreshTime;
         public string LastRefreshTime
         {
@@ -41,6 +53,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// status pripojenia Bluetooth
+        /// </summary>
         private string _connectionStatus;
         public string ConnectionStatus
         {
@@ -55,6 +70,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// zoznam sparovanych zariadeni
+        /// </summary>
         private IList<string> _deviceList;
         public IList<string> DeviceList
         {
@@ -71,6 +89,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        /// zvolene zariadenie ku ktoremu sa pripaja
+        /// </summary>
         private string _selectedDevice;
         public string SelectedDevice
         {
@@ -84,6 +105,9 @@ namespace LLMSapp.ViewModels
             }
         }
 
+        /// <summary>
+        ///Konstruktor triedy
+        /// </summary>
         public HomeViewModel()
         {
             Title = "Domov";
@@ -100,6 +124,9 @@ namespace LLMSapp.ViewModels
 
         }
 
+        /// <summary>
+        /// metoda pre spravu vypnuteho BT
+        /// </summary>
         private async void OfBtHandling()
         {
             bool answer = await Application.Current.MainPage.DisplayAlert("Nemáte zapnuté bluetooth!", "Chcete zapnúť bluetooth?", "ÁNO", "NIE");
@@ -108,6 +135,9 @@ namespace LLMSapp.ViewModels
                 _blueToothService.TurnOnBluetooth();
             }
         }
+        /// <summary>
+        /// Prikaz pre pripojenie BT zariadenia
+        /// </summary>
         public ICommand ConnectCommand => new Command(async () =>
         {
             if (_blueToothService.IsConnected() && _blueToothService.IsBluetoothOn())
@@ -143,12 +173,18 @@ namespace LLMSapp.ViewModels
             }            
         });        
 
+        /// <summary>
+        /// metoda na nacitanie sparovanych zariadeni
+        /// </summary>
         public ICommand RefreshDeviceListCommand => new Command(async () =>
         {
             await GetBtDevices();
         });
 
-        public ICommand GetDistanceCommad => new Command(async () =>
+        /// <summary>
+        /// prikaz na nacitanie vysky hladiny
+        /// </summary>
+        public ICommand GetDistanceCommand => new Command(async () =>
         {
             if (_blueToothService.IsConnected())
             {
@@ -176,6 +212,10 @@ namespace LLMSapp.ViewModels
             }
         });
         
+        /// <summary>
+        /// metoda na nacitanie Bluetooth zariadeni
+        /// </summary>
+        /// <returns></returns>
         private async Task GetBtDevices()
         {
             if (_blueToothService.IsBluetoothOn())
@@ -199,6 +239,9 @@ namespace LLMSapp.ViewModels
             
         }
 
+        /// <summary>
+        /// metoda na nastavenie preferencii aplikacie
+        /// </summary>
         private void SetPreferences()
         {
             Preferences.Set("lastRefreshedTimeKey", LastRefreshTime);
